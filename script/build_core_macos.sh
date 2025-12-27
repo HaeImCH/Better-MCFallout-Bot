@@ -1,6 +1,6 @@
 cd core
 echo "[Info] Install dependencies"
-yarn install
+yarn install --ignore-engines
 echo "[Info] Building core to executable"
 yarn pkg:macos
 
