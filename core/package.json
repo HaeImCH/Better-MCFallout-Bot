@@ -30,6 +30,9 @@
     "outputPath": "out",
     "assets": [
       "node_modules/mineflayer-auto-eat/dist/**/*"
+    ],
+    "scripts": [
+      "node_modules/mineflayer-auto-eat/dist/**/*"
     ]
   },
   "dependencies": {
