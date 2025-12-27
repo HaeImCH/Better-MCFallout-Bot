@@ -1,8 +1,7 @@
 import { Util } from "@/util/util";
 import { EventEmitter, Event } from "@/util/event_emitter";
-import { Bot } from "mineflayer";
+import { Bot, Item } from "mineflayer";
 import { MinecraftItem } from "@/model/minecraft_item";
-import { Item } from "prismarine-item";
 import { config } from "@/index";
 
 export class BotHelper {

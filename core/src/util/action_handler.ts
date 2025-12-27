@@ -138,14 +138,12 @@ export class ActionHandler {
             if (!isEquip) {
               // Equip the best sword
               for (const sword of swords) {
-                const bastSword = bot.inventory.findInventoryItem(
-                  sword,
-                  null,
-                  false
-                );
+                const bestSword = bot.inventory
+                  .items()
+                  .find((item) => item.name === sword);
 
-                if (bastSword != null) {
-                  await bot.equip(bastSword, "hand");
+                if (bestSword != null) {
+                  await bot.equip(bestSword, "hand");
                 }
               }
             }
