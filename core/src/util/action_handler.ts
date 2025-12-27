@@ -89,7 +89,7 @@ export class ActionHandler {
         interval_ticks = 0;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if ((bot as any).autoEat.isEating) return;
+        if ((bot as any).autoEat?.isEating) return;
 
         const mob_list = [
           "blaze",

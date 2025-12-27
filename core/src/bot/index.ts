@@ -1,7 +1,7 @@
 import { BotHelper } from "@/bot/bot_helper";
 import { EventEmitter, Event } from "@/util/event_emitter";
 import * as mineflayer from "mineflayer";
-import * as autoeat from "mineflayer-auto-eat";
+import { loader as autoeat } from "mineflayer-auto-eat";
 import * as readline from "readline";
 import { ActionHandler } from "@/util/action_handler";
 import { config } from "@/index";
@@ -34,7 +34,7 @@ export function createBot() {
     checkTimeoutInterval: 60 * 1000, // 60 seconds
   });
 
-  bot.loadPlugin(autoeat.plugin);
+  bot.loadPlugin(autoeat);
 
   EventEmitter.info("Bot created");
 
@@ -86,13 +86,6 @@ function listenBotEvent(bot: mineflayer.Bot) {
     }
 
     EventEmitter.gameMessage(message.valueOf(), new Date().getTime());
-  });
-
-  // @ts-ignore
-  bot.on("autoeat_error", (err) => {
-    if (err) {
-      EventEmitter.warning(`Auto eat failed: ${err}`);
-    }
   });
 
   bot.on("health", () => {

@@ -9,13 +9,22 @@ export class BotHelper {
   static async onSpawn(bot: Bot) {
     let end = false;
 
-    // Auto eat
+    // Auto eat configuration for mineflayer-auto-eat v5
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (bot as any).autoEat.options = {
-      eatingTimeout: 8,
-      startAt: 18, // If the bot has less food points than that number, it will start eating.
-      bannedFood: ["rotten_flesh", "suspicious_stew"],
-    };
+    const autoEat = (bot as any).autoEat;
+    if (autoEat) {
+      autoEat.setOpts({
+        // Start eating when hunger <= 18 (mirrors old startAt: 18)
+        minHunger: 18,
+        bannedFood: ["rotten_flesh", "suspicious_stew"],
+        // Match old eatingTimeout: 8 (seconds) by using ms
+        eatingTimeout: 8000,
+      });
+
+      autoEat.on("eatFail", (error: Error) => {
+        EventEmitter.warning(`Auto eat failed: ${error.message}`);
+      });
+    }
 
     EventEmitter.emit(Event.connected, {
       host: config.host,
@@ -200,7 +209,7 @@ export class BotHelper {
     async function toss(items: Item[]) {
       for (const item of items) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const isEating: boolean = (bot as any).autoEat.isEating;
+        const isEating: boolean = Boolean((bot as any).autoEat?.isEating);
 
         // Never drop off-hand or totems, even if config changes.
         if (item.name === "totem_of_undying" || item.slot === 45) continue;
@@ -242,10 +251,12 @@ export class BotHelper {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const autoEat = (bot as any).autoEat;
 
-    if (bot.food == 20 || !config.auto_eat) {
-      autoEat.disable();
-    } else if (config.auto_eat) {
-      autoEat.enable();
+    if (!autoEat) return;
+
+    if (!config.auto_eat) {
+      autoEat.disableAuto();
+    } else {
+      autoEat.enableAuto();
     }
   }
 
@@ -256,7 +267,7 @@ export class BotHelper {
     if (offhandItem?.name === "totem_of_undying") return;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((bot as any).autoEat.isEating) return;
+    if ((bot as any).autoEat?.isEating) return;
 
     const totem = bot
       .inventory

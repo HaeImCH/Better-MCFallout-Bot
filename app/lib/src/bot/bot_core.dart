@@ -48,7 +48,11 @@ class BotCore {
       // Successful to reconnect, so reset reconnect times
       reconnectTimes > 0 ? reconnectTimes-- : reconnectTimes = 0;
       return true;
-    } on TimeoutException {
+    } on TimeoutException catch (e, st) {
+      _logger.severe('Connection timed out after 20s', e, st);
+      return false;
+    } catch (e, st) {
+      _logger.severe('Connection failed: $e', e, st);
       return false;
     }
   }
@@ -130,16 +134,17 @@ class BotCore {
     _logging();
 
     _logger.info('Waiting for server handshake...');
-    whenEvent<ConnectedEvent>((event) {
+
+    final connectedFuture = whenEventStream<ConnectedEvent>().first.then((e) {
       connected = true;
-      connectedData = event;
+      connectedData = e;
       _logger.info('Connected to $host:$port');
     });
 
-    // Wait for connecting to the server
-    while (!connected) {
-      await Future.delayed(const Duration(milliseconds: 100));
-    }
+    final exitEarly = process.exitCode.then((code) => throw Exception(
+        'Bot core exited before connecting (exit code $code). Check server availability and credentials.'));
+
+    await Future.any([connectedFuture, exitEarly]);
   }
 
   Stream<IEvent> _listen() {
