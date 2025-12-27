@@ -1,8 +1,10 @@
 import { Util } from "@/util/util";
 import { EventEmitter, Event } from "@/util/event_emitter";
-import { Bot, Item } from "mineflayer";
+import { Bot } from "mineflayer";
 import { MinecraftItem } from "@/model/minecraft_item";
 import { config } from "@/index";
+
+type InventoryItem = ReturnType<Bot["inventory"]["items"]>[number];
 
 export class BotHelper {
   static async onSpawn(bot: Bot) {
@@ -205,7 +207,7 @@ export class BotHelper {
       "totem_of_undying",
     ];
 
-    async function toss(items: Item[]) {
+    async function toss(items: InventoryItem[]) {
       for (const item of items) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const isEating: boolean = Boolean((bot as any).autoEat?.isEating);
