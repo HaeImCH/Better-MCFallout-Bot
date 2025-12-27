@@ -97,6 +97,13 @@ function listenBotEvent(bot: mineflayer.Bot) {
 
   bot.on("health", () => {
     BotHelper.autoEatConfig(bot);
+    void BotHelper.ensureTotemInOffHand(bot);
+  });
+
+  bot.on("entityHurt", (entity) => {
+    if (entity === bot.entity) {
+      void BotHelper.ensureTotemInOffHand(bot);
+    }
   });
 
   bot.on("kicked", (reason) => {

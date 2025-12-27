@@ -70,6 +70,17 @@ export class BotHelper {
     bot.once("end", () => {
       end = true;
     });
+
+    const autoTotemIntervalID = setInterval(() => {
+      if (end) {
+        clearInterval(autoTotemIntervalID);
+        return;
+      }
+
+      void this.ensureTotemInOffHand(bot);
+    }, 1000);
+
+    void this.ensureTotemInOffHand(bot);
   }
 
   static async throwItems(bot: Bot) {
@@ -191,6 +202,9 @@ export class BotHelper {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const isEating: boolean = (bot as any).autoEat.isEating;
 
+        // Never drop off-hand or totems, even if config changes.
+        if (item.name === "totem_of_undying" || item.slot === 45) continue;
+
         if (config.auto_throw && !isEating) {
           if (!bannedItem.includes(item.name)) {
             await bot.tossStack(item);
@@ -232,6 +246,29 @@ export class BotHelper {
       autoEat.disable();
     } else if (config.auto_eat) {
       autoEat.enable();
+    }
+  }
+
+  static async ensureTotemInOffHand(bot: Bot) {
+    const OFFHAND_SLOT = 45; // Fixed off-hand slot index
+
+    const offhandItem = bot.inventory.slots[OFFHAND_SLOT];
+    if (offhandItem?.name === "totem_of_undying") return;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((bot as any).autoEat.isEating) return;
+
+    const totem = bot
+      .inventory
+      .items()
+      .find((item) => item.name === "totem_of_undying");
+
+    if (!totem) return;
+
+    try {
+      await bot.equip(totem, "off-hand");
+    } catch (error) {
+      EventEmitter.warning(`Unable to equip totem: ${error}`);
     }
   }
 }

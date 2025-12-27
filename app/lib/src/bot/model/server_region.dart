@@ -11,7 +11,8 @@ enum ServerRegion {
   japan('jp.mcfallout.net'),
 
   denpa('denpa.mcfallout.net'),
-  mercy('mercy.mcfallout.net');
+  mercy('mercy.mcfallout.net'),
+  nelsongx('smp.nelsongx.com');
 
   final String host;
   const ServerRegion(this.host);
@@ -30,6 +31,8 @@ enum ServerRegion {
         return 'Denpa';
       case ServerRegion.mercy:
         return 'Mercy';
+      case ServerRegion.nelsongx:
+        return 'NelsonGX SMP';
     }
   }
 
