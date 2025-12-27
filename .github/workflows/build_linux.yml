@@ -11,7 +11,7 @@ jobs:
   build_linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2.8.0
         with:
           channel: "beta"
@@ -24,7 +24,7 @@ jobs:
       - name: Build release
         run: bash script/build_linux.sh
       - name: Upload Linux artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Better-MCFallout-Bot-${{ inputs.version }}-Linux
           path: ${{ github.workspace }}/app/build/linux/x64/release/bundle
