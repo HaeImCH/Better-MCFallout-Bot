@@ -27,7 +27,10 @@
     "typescript": "^4.7.4"
   },
   "pkg": {
-    "outputPath": "out"
+    "outputPath": "out",
+    "assets": [
+      "node_modules/mineflayer-auto-eat/dist/**/*"
+    ]
   },
   "dependencies": {
     "mineflayer": "4.33.0",
