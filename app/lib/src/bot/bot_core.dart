@@ -37,6 +37,8 @@ class BotCore {
   Future<bool> connect() async {
     if (connected) return true;
     try {
+      _logger.info(
+          'Connecting to server (attempt ${reconnectTimes + 1}) for ${account.username} in region ${region.name}');
       // Not the first time to reconnect
       if (reconnectTimes > 1) {
         await Future.delayed(const Duration(seconds: 15));
@@ -102,11 +104,13 @@ class BotCore {
   }
 
   Future<void> _connect() async {
+    _logger.info('Resolving host for region ${region.name}...');
     if (region == ServerRegion.auto) {
       host = await ServerRegion.getBestHost();
     } else {
       host = region.host;
     }
+    _logger.info('Selected host $host:$port, launching bot core...');
 
     final config = _getConfig();
 
@@ -125,6 +129,7 @@ class BotCore {
     eventStream = _listen();
     _logging();
 
+    _logger.info('Waiting for server handshake...');
     whenEvent<ConnectedEvent>((event) {
       connected = true;
       connectedData = event;
