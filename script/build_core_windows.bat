@@ -5,7 +5,7 @@ echo "[Info] Install dependencies"
 call yarn install --ignore-engines
 
 echo "[Info] Building core to executable"
-call yarn pkg:windows
+call yarn package:windows
 
 echo "[Info] Copying the core to the app"
 cd ..
