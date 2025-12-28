@@ -28,7 +28,7 @@ export function createBot() {
 
       options.connect?.(client);
     },
-    version: "1.19.2",
+    version: "1.20.1",
     host: config.host,
     port: config.port,
     checkTimeoutInterval: 60 * 1000, // 60 seconds
