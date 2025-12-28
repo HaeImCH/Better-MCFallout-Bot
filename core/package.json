@@ -30,7 +30,8 @@
   "pkg": {
     "outputPath": "out",
     "assets": [
-      "node_modules/mineflayer-auto-eat/dist/**/*"
+      "node_modules/mineflayer-auto-eat/dist/**/*",
+      "node_modules/minecraft-data/data/**/*"
     ],
     "scripts": [
       "node_modules/mineflayer-auto-eat/dist/**/*"
